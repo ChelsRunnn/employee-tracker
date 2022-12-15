@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS theRanch_db;
 CREATE DATABASE theRanch_db;
 
 USE theRanch_db;
