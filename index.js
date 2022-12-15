@@ -51,27 +51,27 @@ function main() {
             }
             return
         })
-        // .then(ans => {
-        //     switch (ans.initialize) {
-        //         case "View all departments": viewDepartment();
-        //             break;
-        //         case "View all roles": viewRole();
-        //             break;
-        //         case "View all employees": viewEmployee();
-        //             break;
-        //         case "Add a department": addDepartment();
-        //             break;
-        //         case "Add a role": addRole();
-        //             break;
-        //         case "Add an employee": addEmployee();
-        //             break;
-        //         case "Update an employee role": updateEmployee();
-        //             break;
-        //         case "Exit":
-        //             console.log("Thank you very much!");
-        //             process.exit();
-        //     }
-        // }).catch(err => console.error(err));
+    // .then(ans => {
+    //     switch (ans.initialize) {
+    //         case "View all departments": viewDepartment();
+    //             break;
+    //         case "View all roles": viewRole();
+    //             break;
+    //         case "View all employees": viewEmployee();
+    //             break;
+    //         case "Add a department": addDepartment();
+    //             break;
+    //         case "Add a role": addRole();
+    //             break;
+    //         case "Add an employee": addEmployee();
+    //             break;
+    //         case "Update an employee role": updateEmployee();
+    //             break;
+    //         case "Exit":
+    //             console.log("Thank you very much!");
+    //             process.exit();
+    //     }
+    // }).catch(err => console.error(err));
 };
 
 const viewDepartment = () => {
@@ -100,19 +100,24 @@ const addDepartment = () => {
         {
             name: 'newDept',
             type: 'input',
-            message: 'Department name:',
+            message: 'New department name:',
         }
     ])
         .then((deptAnswer) => {
-            const newDeptName = deptAnswer.newDept
-            db.query('INSERT INTO department (name) VALUES (' ? ')' : newDeptName, (err, results) => {
-                console.log('Department successfully added')
-            });
-            db.query('SELECT * FROM department', (err, results) => {
-                console.table(results);
+            const params = deptAnswer.newDept
+            const sql = `INSERT INTO department(name) VALUES (?)`
+            db.query(sql, params, (err, results) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    db.query(`SELECT * FROM department`, (err, results) => {
+                        err ? console.log(err) : console.table(results);
+                        main();
+                    })
+                };
             })
-        });
-}
+        })
+};
 
 const addRole = () => {
     inquirer.prompt([
@@ -147,12 +152,12 @@ const addRole = () => {
                 console.log('Department successfully added')
             })
         });
-        // .then(function() {
-            db.query('SELECT * FROM department', (err, results) => {
-                console.table(results);
-            });
-        // })
-// });
+    // .then(function() {
+    db.query('SELECT * FROM department', (err, results) => {
+        console.table(results);
+    });
+    // })
+    // });
 };
 
 main();
