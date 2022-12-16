@@ -27,8 +27,8 @@ function main() {
         ])
         .then((introAnswer) => {
             if (introAnswer.intro == 'View all departments') {
+            //  calls the viewDepartment() function if this choice is picked by user
                 viewDepartment()
-                // call func to view all depts
             } else if (introAnswer.intro == 'View all roles') {
                 viewRole()
             } else if (introAnswer.intro == 'View all employees') {
@@ -44,57 +44,36 @@ function main() {
             } else if (introAnswer.intro == 'Exit') {
                 console.log('Thank you, goodbye');
                 prompt.ui.close();
-                // this works to close the prompt but throws an error
                 return
             } else {
                 console.log('Choose a valid option')
             }
             return
         })
-    // .then(ans => {
-    //     switch (ans.initialize) {
-    //         case "View all departments": viewDepartment();
-    //             break;
-    //         case "View all roles": viewRole();
-    //             break;
-    //         case "View all employees": viewEmployee();
-    //             break;
-    //         case "Add a department": addDepartment();
-    //             break;
-    //         case "Add a role": addRole();
-    //             break;
-    //         case "Add an employee": addEmployee();
-    //             break;
-    //         case "Update an employee role": updateEmployee();
-    //             break;
-    //         case "Exit":
-    //             console.log("Thank you very much!");
-    //             process.exit();
-    //     }
-    // }).catch(err => console.error(err));
 };
-
+// Display Department table 
 const viewDepartment = () => {
     db.query(`SELECT * FROM department`, (err, results) => {
         err ? console.log(err) : console.table(results);
+         // Return to main options menu
         main();
     })
 };
-
+// Display Role table
 const viewRole = () => {
     db.query(`SELECT * FROM role`, (err, results) => {
         err ? console.log(err) : console.table(results);
         main();
     })
 };
-
+// Display Employee table
 const viewEmployee = () => {
     db.query(`SELECT * FROM employee`, (err, results) => {
         err ? console.log(err) : console.table(results);
         main();
     })
 };
-
+// Add row/entry to Department table
 const addDepartment = () => {
     inquirer.prompt([
         {
@@ -104,6 +83,7 @@ const addDepartment = () => {
         }
     ])
         .then((deptAnswer) => {
+            // saved parameter and mysql syntax to variables to clean up the query below
             const params = deptAnswer.newDept
             const sql = `INSERT INTO department(name) VALUES (?)`
             db.query(sql, params, (err, results) => {
@@ -111,14 +91,16 @@ const addDepartment = () => {
                     console.log(err)
                 } else {
                     db.query(`SELECT * FROM department`, (err, results) => {
+                        // display the Department table updated with new entry
                         err ? console.log(err) : console.table(results);
+                         // Return to main options menu
                         main();
                     })
                 };
             })
         })
 };
-
+// Add a role to Role table
 const addRole = () => {
     inquirer.prompt([
         {
@@ -157,9 +139,9 @@ const addRole = () => {
             })
         });
 };
-
+// Add row/entry to Employee table
 const addEmployee = () => {
-    // Query pulls list of roles to display as choices in role_id question
+    // Query pulls all data from Role table, so role types can be displayed as choices in role_id question
     db.query(`SELECT * FROM role`, (err, results) => {
         if (err) {
             console.log(err)
@@ -181,6 +163,7 @@ const addEmployee = () => {
                 name: 'role_id',
                 type: 'list',
                 message: 'What does this employee do around the Ranch?',
+                // using the results from the query above, "name" is displayed to user, "value" is recorded as user choice
                 choices: results.map((role) => ({
                    name: role.title,
                    value: role.id
@@ -209,7 +192,7 @@ const addEmployee = () => {
     })
     
 };
-
+// Update current employee
 const updateEmployee = () => {
     inquirer.prompt([
         {
@@ -240,12 +223,3 @@ const updateEmployee = () => {
 };
 
 main();
-
-// EXAMPLE OF PREPARED STATEMENT: check act 21/22
-// db.query('INSERT INTO ? (name, ) VALUES ("? ?")', [table, {id: someValue, name: someValue}], (err, result) => {
-//     if (err) {
-//         console.log(err);
-//     }
-//  else {
-//     console.table(results)
-//  }})
