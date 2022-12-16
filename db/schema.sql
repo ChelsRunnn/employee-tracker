@@ -5,7 +5,7 @@ USE theRanch_db;
 
 DROP TABLE IF EXISTS department;
 CREATE TABLE department (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(30)
 );
 
@@ -22,7 +22,7 @@ CREATE TABLE role (
 
 DROP TABLE IF EXISTS employee;
 CREATE TABLE employee (
-    id INT NOT NULL PRIMARY KEY, 
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
     first_name VARCHAR(30),
     last_name VARCHAR(30), 
     role_id INT,
