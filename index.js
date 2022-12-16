@@ -14,7 +14,7 @@ const db = mysql.createConnection(
     console.log('Connected to theRanch_db successfully!')
 );
 
-// main function that houses all potential options
+// Main function, houses all potential options
 function main() {
     inquirer
         .prompt([
@@ -221,4 +221,5 @@ const updateEmployee = () => {
     })
 };
 
+// Calls the main options function when page is run in the command line
 main();
