@@ -43,8 +43,7 @@ function main() {
                 updateEmployee()
             } else if (introAnswer.intro == 'Exit') {
                 console.log('Thank you, goodbye');
-                prompt.ui.close();
-                return
+                process.exit(0);
             } else {
                 console.log('Choose a valid option')
             }

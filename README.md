@@ -1,4 +1,6 @@
 # employee-tracker
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 ## Description
 
@@ -15,12 +17,12 @@ This employee tracking app is a content management system (CMS) that utilizes My
 
 ## Installation
 
-This application runs on Node.js and requires both Inquirer and MySQL2 to be installed. Run <npm i> in the command line to get them up and running on your local machine. 
+This application runs on Node.js and requires both Inquirer and MySQL2 to be installed. The console.table package that is also included is not necessary to run the app, but does contribute to a better user experience. Run <npm i> in the command line to get them all up and running on your local machine. 
 
 
 ## Usage
 
-Visit the demo video [here](https://drive.google.com/file/d/1C2HF9CQoPODgbf2gNkVPNxXFOgz9LwvN/view).
+Visit the demo video [here](https://drive.google.com/file/d/129RiKMjNlu0tYPMxGK_5AQO-0NlGwD6Q/view).
 
 
 ## Credits
