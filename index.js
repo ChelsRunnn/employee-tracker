@@ -121,15 +121,15 @@ const addDepartment = () => {
 
 const addRole = () => {
     inquirer.prompt([
+        // {
+        //     name: 'roleID',
+        //     type: 'input',
+        //     message: 'Role id:',
+        // },
         {
-            name: 'newRole',
+            name: 'title',
             type: 'input',
             message: 'Role title:',
-        },
-        {
-            name: 'roleID',
-            type: 'input',
-            message: 'Role id:',
         },
         {
             name: 'salary',
@@ -143,21 +143,90 @@ const addRole = () => {
         }
     ])
         .then((roleAnswer) => {
-            const newRoleName = roleAnswer.newRole;
-            const newRoleId = roleAnswer.roleID;
-            const newRoleSalary = roleAnswer.salary;
-            const newRoleDeptId = roleAnswer.deptID;
-
-            db.query('INSERT INTO role (name) VALUES ("? ? ? ?")', [newRoleId, newRoleName, newRoleSalary, newRoleDeptId], (err, results) => {
-                console.log('Department successfully added')
+            const params = [roleAnswer.roleID, roleAnswer.title, roleAnswer.salary, roleAnswer.deptID];
+            const sql = `INSERT INTO role (id, title, salary, department_id) VALUES (? ? ? ?)`;
+            // error with SQL syntax somehow ??
+            db.query(sql, params, (err, results) => {
+            // db.query(`INSERT INTO role (title, salary, department_id) VALUES (? ? ?)`, [roleAnswer.title, roleAnswer.salary, roleAnswer.deptID], function (err, results) {
+                if (err) {
+                    console.log(err)
+                } else {
+                    db.query(`SELECT * FROM role`, (err, results) => {
+                        err ? console.log(err) : console.table(results);
+                        main();
+                    })
+                }
             })
         });
-    // .then(function() {
-    db.query('SELECT * FROM department', (err, results) => {
-        console.table(results);
-    });
-    // })
-    // });
+};
+
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            name: 'first_name',
+            type: 'input',
+            message: 'Employee first name:',
+        },
+        {
+            name: 'last_name',
+            type: 'input',
+            message: 'Employee last name:',
+        },
+        {
+            name: 'role_id',
+            type: 'input',
+            message: 'What does this employee do around the Ranch?',
+            // choices: ''
+        },
+        {
+            name: 'manager_id',
+            type: 'input',
+            message: "Who is this employee's manager?",
+        }
+    ])
+        .then((employeeAnswer) => {
+            const sql = `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`
+            const params =
+                db.query(sql, [table, { first_name: employeeAnswer.first_name, last_name: employeeAnswer.last_name, role_id: employeeAnswer.role_id, manager_id: employeeAnswer.manager_id }], (err, results) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        db.query(`SELECT * FROM employee`, (err, results) => {
+                            err ? console.log(err) : console.table(results);
+                            main();
+                        })
+                    }
+                })
+        })
+};
+
+const updateEmployee = () => {
+    inquirer.prompt([
+        {
+            name: "first_name",
+            type: "input",
+            message: "Please enter the first name of the employee you want update."
+        },
+        {
+            name: "role_id",
+            type: "number",
+            message: "Please enter the new role number id associated with the employee you want to update."
+        }
+    ])
+    .then((updateAnswer) => {
+        const params = [updateAnswer.role_id, updateAnswer.first_name];
+        const sql = `UPDATE employee SET role_id = ? WHERE first_name = ?`
+        db.query(sql, params, (err, results) => {
+            if (err) {
+                console.log(err)
+            } else {
+                db.query(`SELECT * FROM employee`, (err, results) => {
+                    err ? console.log(err) : console.table(results);
+                    main();
+                })
+            };
+        })
+    })
 };
 
 main();
